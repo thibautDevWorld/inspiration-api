@@ -40,13 +40,45 @@ const saveBook = async (req, res,) => {
 
 
 // delete one
+const deleteBook = async (req, res) => {
+    const { id } = req.params
+
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({error: 'No such book'})
+    }
+
+    const book = await Books.findByIdAndDelete({ _id: id })
+
+    if(!book) {
+        return res.status(404).json({error: 'No such book'})
+    }
+    res.status(200).json(book)
+}
 
 
 // update one
+const updateBook = async (req, res) => {
+    const { id } = req.params
+
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({error: 'No such book'})
+    }
+
+    const book = await Books.findByIdAndUpdate({ _id: id }, {
+        ...req.body
+    })
+
+    if(!book) {
+        return res.status(404).json({error: 'No such book'})
+    }
+    res.status(200).json(book)
+}
 
 
 module.exports = {
     saveBook,
     getBooks,
-    getBook
+    getBook,
+    deleteBook,
+    updateBook
 }

@@ -4,7 +4,7 @@ const router = express.Router()
 const Books = require('../models/Books')
 const User = require('../models/User')
 const axios = require('axios')
-const { saveBook, getBooks, getBook } = require('../controllers/booksController')
+const { saveBook, getBooks, getBook, deleteBook, updateBook } = require('../controllers/booksController')
 
 
 // Get the list of books from the db
@@ -15,6 +15,12 @@ router.post('/', saveBook)
 
 // Get a single book 
 router.get('/:id', getBook)
+
+// Get a single book 
+router.delete('/:id', deleteBook)
+
+// Get a single book 
+router.patch('/:id', updateBook)
 
 
 // Looking for extern Api books 
