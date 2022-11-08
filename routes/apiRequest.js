@@ -6,6 +6,11 @@ const User = require('../models/User')
 const axios = require('axios')
 const { saveBook, getBooks, getBook, deleteBook, updateBook } = require('../controllers/booksController')
 
+const requireAuth = require('../middleware/requireAuth')
+
+
+// require auth for all inspiration routes
+router.use(requireAuth)
 
 // Get the list of books from the db
 router.get('/', getBooks)
@@ -28,7 +33,7 @@ router.post('/book-create', async (req, res, next) => {
    const { search } = req.body
 
    try {
-    const bookSearch = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${search}`)
+    const bookSearch = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${search}&maxResults=40`)
     res.json(bookSearch.data.items) 
    }
    catch (error) {
@@ -36,27 +41,32 @@ router.post('/book-create', async (req, res, next) => {
    }
 })
 
+router.get("/home/user/book-create", (req, res, next)=>{
+   res.json({books: response.data.items})
+})
 
+ router.post("/home/user/book-create/add", (req, res, next)=>{
+   let newBook = {
+     bookId: req.body.bookId,
+     title: req.body.title,
+     author: req.body.author,
+     cover: req.body.cover
+   }
 
-// // Create the book that you selected from googleBooks API
-// router.post('/user/book-create/add', async (req, res, next) => {
-//     let newBook = {
-//         bookId: req.body.bookId,
-//         title: req.body.title,
-//         author: req.body.author,
-//         cover: req.body.cover
-//       }    //   const { bookId, title, author, cover } = req.body
-
-//       try {
-//         const book = await Books.create(newBook)
-//         // let id = book._id
-//         // User.findByIdAndUpdate(req.session.user._id, {$push: { books: id }})
-//         res.status(200).json(book)
-//       }
-//       catch (error) {
-//         res.status(400).json({error: error.message})
-//       }
-// })
+   Books.create(newBook)
+   .then(book => {
+     let id = book._id
+     console.log(book);
+     return User.findByIdAndUpdate(req.session.user._id, {$push: {books: id}})
+   })
+   .then(()=>{
+     res.redirect("/home/user")
+   })
+    .catch(error => {
+     console.log("error creating Book in DB", error);
+     next(error);
+   })
+})
 
 
 // // Upload the book that need to be modify

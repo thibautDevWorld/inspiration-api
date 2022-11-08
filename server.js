@@ -3,6 +3,7 @@ require('dotenv').config()
 const apiRequest = require('./routes/apiRequest')
 const mongoose = require('mongoose')
 const express = require('express')
+const userRoutes = require('./routes/user')
 
 // express app
 const app = express()
@@ -15,7 +16,8 @@ app.use((req, res, next) => {
 app.use(express.json())
 
 //routes
-app.use('/api', apiRequest)
+app.use('/api/books', apiRequest)
+app.use('/api/user', userRoutes)
 
 //connect to db
 mongoose.connect(process.env.MONGO_URI)

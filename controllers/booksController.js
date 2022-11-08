@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 
 // get all books
 const getBooks = async (req, res) => {
-    const books = await Books.find({})
+    const user_id = req.user._id
+    const books = await Books.find({ user_id })
     res.status(200).json(books)
 }
 
@@ -27,10 +28,11 @@ const getBook = async (req, res) => {
 
 // create/save a book in the list
 const saveBook = async (req, res,) => {
-    const { title, author } = req.body
+    const { bookId, title, authors, cover, description } = req.body
 
     try {
-        const book = await Books.create({ title, author })
+        const user_id = req.user._id
+        const book = await Books.create({ bookId, title, authors, cover, description, user_id })
         res.status(200).json(book)
     }
     catch (error) {
