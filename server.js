@@ -14,11 +14,13 @@ const cors = require('cors')
 app.use('*',
     cors({
       origin: process.env.FRONTEND_URL,
-      credentials: true
+      credentials: "include"
     })
   );
 
 app.use((req, res, next) => {
+    res. header("Access-Control-Allow-Origin", "*");
+    res. header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next()
 })
 
