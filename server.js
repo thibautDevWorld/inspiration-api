@@ -7,6 +7,14 @@ const userRoutes = require('./routes/user')
 
 // express app
 const app = express()
+const cors = require('cors')
+
+app.use(
+    cors({
+      origin: process.env.FRONTEND_URL,
+      credentials: true
+    })
+  );
 
 app.use((req, res, next) => {
     next()
