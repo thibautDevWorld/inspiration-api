@@ -1,4 +1,5 @@
 {
+  "proxy":"https://inspiration-app-2022.herokuapp.com",
   "name": "inspiration-api",
   "version": "1.0.0",
   "description": "",
