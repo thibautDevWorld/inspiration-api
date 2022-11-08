@@ -56,7 +56,6 @@ router.get("/home/user/book-create", (req, res, next)=>{
    Books.create(newBook)
    .then(book => {
      let id = book._id
-     console.log(book);
      return User.findByIdAndUpdate(req.session.user._id, {$push: {books: id}})
    })
    .then(()=>{
@@ -67,27 +66,6 @@ router.get("/home/user/book-create", (req, res, next)=>{
      next(error);
    })
 })
-
-
-// // Upload the book that need to be modify
-// router.get('/user/:bookId/edit', (req, res, next) => {
-//     res.json({message: 'Here it is the previous book selected'})
-// })
-
-// // Update the previous book
-// router.patch('/user/:bookId/edit', (req, res, next) => {
-//     res.json({message: 'The book has been modify'})
-// })
-
-// // Go inside a anonymous profile
-// router.get('/:userId', (req, res, next) => {
-//     res.json({message: 'You are in the profile n°'})
-// })
-
-// // Delete book
-// router.delete('/user/:bookId', (req, res, next) => {
-//     res.json({message: 'You deleted the book'})
-// })
 
 
 
